@@ -7,9 +7,9 @@
      <link rel="stylesheet" href="../static/css/styles.css">
     <title>MangoTracko</title>
 </head>
-<body class="dark-mode">
+<body>
     <header>
-        <h1 class="title">MangoTracko</h1>
+        <h1 class="title">Add Mango</h1>
     </header>
     <main>
         <form class="mango-form">
@@ -17,16 +17,20 @@
           </div>
           <label for="title">Title</label>
           <input class="u-full-width" type="text" id="title" name="title">
-          <label for="lastChapterRead">Last Chapter Read</label>
-          <textarea class="u-full-width" type="text" id="lastChapterRead" name="lastChapterRead"></textarea>
+          <label for="lastChapterRead">Last chapter read</label>
+          <input class="u-full-width" type="text" id="lastChapterRead" name="lastChapterRead"></input>
+          <label for="lastChapterReadTime">Last read date and time</labek>
+          <input class="u-full-width" type='datetime-local' id="timePicker" name="timePicker" />
+          <label for="startChapterReadTime">Start read date and time</labek>
+          <input class="u-full-width" type='datetime-local' id="timePicker" name="timePicker" />
           <button class="button-primary">Save</button>
         </form>
-        <div class="mews">
+        <div class="mango">
     
         </div>
         <div class="button-container">
           <!-- <button id="loadMoreButton" class="button-primary" style="visibility: hidden">Load More Mews</button> -->
-          <p id="loadMore">Loading...</p>
+          <!-- <p id="loadMore">Loading...</p> -->
         </div>
         <div class="loading">
           <img src="../static/img/loading.gif" alt="">
