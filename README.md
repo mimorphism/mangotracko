@@ -1,5 +1,3 @@
 # mangotracko
 
-A manga tracker restful webservice, as in tracks the manga you have read, latest chapter and all that jazz. Think of it like your own personal library system. 
-
-Built with Spring Boot
+A manga tracker web application that tracks the manga you have read. Think of it like your own personal library system. 
