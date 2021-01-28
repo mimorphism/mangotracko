@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico"/>
 
-    <title>Navbar Template for Bootstrap</title>
+    <title>MangoTracko</title>
 
     <!-- Bootstrap core CSS -->
     <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
@@ -27,7 +27,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#" th:text="${username}">Project name</a>
+                <a class="navbar-brand" href="#" th:text="${username}">MangoTracko</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -61,10 +61,10 @@
         <!--Usage of models we wrote in WepAppController th:text="'Welcome to basic Bootstrap with Spring Boot created by ' + ${username} -->
         <h3 th:text="'Welcome to ' + ${appName}"></h3>
         <p th:text="'This date example  ' + ${#dates.format(datetime, 'dd MMM yyyy HH:mm')}"></p>
-        <p> is a quick exercise to illustrate how the default, static navbar and fixed to top navbar work.
-            It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
+        <p> 
+            Click the button to add mango</p>
         <p>
-            <a class="btn btn-lg btn-primary" href="#" role="button">View navbar docs &raquo;</a>
+            <a class="btn btn-lg btn-primary" href="addmango.html" role="button">Add Mango &raquo;</a>
         </p>
     </div>
 </div> <!-- /container -->
