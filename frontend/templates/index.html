@@ -9,18 +9,62 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
-     <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="stylesheet/less" type="text/css" href="../static/css/styles.less">
+     <script src="../static/css/less/less.js" type="text/javascript"></script>
     <title>MangoTracko</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
 </head>
 <body>
-    <header>
-        <h1 class="title">Update Backlog</h1>
-    </header>
-    <p><a href="addmango.html">Finish a mango? Click this!</a></p>
-    <p><a href="addMango.html">Add new mango? Click this!</a></p>
-        <script>src="../static/js/client.js"</script>
+    <div class="header">
+          <a href="index.html" class="logo">
+            <div class="bar"></div>
+            <div class="title">MangoTracko</div>
+        </a>
+        <div class="menu">
+          <a href="completedMango.html" class="link">
+            <div class="title">Completed</div>
+            <div class="bar"></div>
+          </a>
+          <a href="ongoingMango.html" class="link">
+            <div class="title">Ongoing</div>
+            <div class="bar"></div>
+          </a>
+          <a href="addMango.html" class="link">
+            <div class="title">Add Mango</div>
+            <div class="bar"></div>
+          </a>
+          <a href="finishMango.html" class="link">
+            <div class="title">Finish Mango</div>
+            <div class="bar"></div>
+          </a>
+        </div>
+      </div>
+      <!-- <div class="test">
+        <a href="index.html" class="logo">MangoTracko
+          <div class="bar"></div>
+        </a>
+        <div class="toggle"></div>
+        <ul>
+          <li><a href="completedMango.html" class="link">Completed
+            <div class="bar"></div>
+          </a></li>
+          <li><a href="ongoingMango.html" class="link">Ongoing
+            <div class="bar"></div>
+          </a></li>
+          <li><a href="addMango.html" class="link">Add Mango
+            <div class="bar"></div>
+          </a></li>
+          <li><a href="finishMango.html" class="link">Finish Mango
+            <div class="bar"></div>
+          </a></li>
+        </ul>
+      </div> -->
+      <br></br>
+    <!-- <header>
+        <h1 class="title">MangoTracko</h1>
+    </header> -->
+        <script>src="../static/js/client.js"
+     
+        
+        </script>
 </body>
 </html>

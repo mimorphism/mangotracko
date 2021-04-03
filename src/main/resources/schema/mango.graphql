@@ -1,0 +1,23 @@
+{
+  Media (search: "satanophany" source_in: ORIGINAL) 
+  {
+    coverImage {
+      large
+    }
+    title {
+      romaji
+    }
+     staff{
+        nodes {
+          name {
+            full
+          }
+          description
+        }
+    
+    }
+   
+  }
+
+}
+     
