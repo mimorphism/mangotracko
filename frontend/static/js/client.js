@@ -23,9 +23,10 @@ document.addEventListener('scroll', () => {
   if (rect.top < window.innerHeight && !loading && !finished) {
     loadMore();
   }
+  var header = document.querySelector('test');
+          header.classList.toggle('sticky', window.scrollY > 0);
 });
 
-listAllMews();
 
 form.addEventListener('submit', (event) => {
   event.preventDefault();
@@ -38,8 +39,8 @@ form.addEventListener('submit', (event) => {
     form.style.display = 'none';
     loadingElement.style.display = 'none';
 
-    const mew = {
-      name,
+    const mango = {
+      title,
       content
     };
 
