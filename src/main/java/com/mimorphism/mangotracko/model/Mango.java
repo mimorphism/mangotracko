@@ -1,18 +1,9 @@
 package com.mimorphism.mangotracko.model;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
-
-import org.springframework.lang.Nullable;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,45 +15,52 @@ import lombok.Setter;
 @Data
 @Entity
 @AllArgsConstructor 
-@Table(name= "mt_mangoes")
+@Table(name= "mangoes")
 @Getter
 @Setter
 public class Mango {
 	
+	private static final String DATE_FORMAT = "dd/MM/yyyy HH:mm:ss";
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)  
-	@Column(name="MANGO_ID")
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name="mangoId")
     private Long mangoId;
 
-    @Column(name="MANGO_TITLE")
+    @Column(name="mangoTitle")
+    @NotEmpty(message="* Enter Mango Title")
     private String mangoTitle;
     
-    @Column(name="STATUS")
-    private String mangoStatus;
+    @Column(name="author")
+    private String author; 
     
+    @Column(name="totalChapter")
+    private int totalChapter;
     
-    @Column(name="COMPLETION_DATE")
-    private String completionDateTime;    
+    @Column(name="lastReadChapter")
+    private int lastReadChapter;
     
-    @Column(name="REMARKS")
+    @Column(name="lastReadTime")
+    private String lastReadTime;
+    
+    @Column(name="startReadTime")
+    private String startReadTime;    
+    
+    @Column(name="remarks")
     private String remarks;
     
-    @Column(name="IMG_PATH")
-    private String img;
-    
-    @Column(name="AUTHOR")
-    private String author;
-    
-    @Nullable
-    @OneToOne(fetch = FetchType.EAGER,
-            cascade =  CascadeType.ALL,
-            mappedBy = "mango")
-    @JsonManagedReference
-    private OngoingMango ongoingMango;
-    
-    
-
+        
+	public Mango(@NotEmpty(message = "* Enter Mango Title") String mangoTitle, String author, int totalChapter,
+			int lastReadChapter, String lastReadTime, String startReadTime, String remarks) {
+		super();
+		this.mangoTitle = mangoTitle;
+		this.author = author;
+		this.totalChapter = totalChapter;
+		this.lastReadChapter = lastReadChapter;
+		this.lastReadTime = lastReadTime;
+		this.startReadTime = startReadTime;
+		this.remarks = remarks;
+	}
 
 
 }

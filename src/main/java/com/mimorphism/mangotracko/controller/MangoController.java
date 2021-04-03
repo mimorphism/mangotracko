@@ -7,24 +7,17 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mimorphism.mangotracko.model.Mango;
-import com.mimorphism.mangotracko.model.MangoInfo;
-import com.mimorphism.mangotracko.model.OngoingMango;
 import com.mimorphism.mangotracko.persistence.MangoRepo;
-import com.mimorphism.mangotracko.service.MangoInfoService;
-import com.mimorphism.mangotracko.service.MangoService;
 
 
 @RestController
@@ -35,10 +28,10 @@ public class MangoController {
     String appName;
     
     @Autowired
-    private MangoService mangoService;
+    private MangoRepo mangoRepo;
     
-    @Autowired
-    private MangoInfoService anilist;
+    private List<Mango> mangoList = new ArrayList<Mango>();
+    private final AtomicLong counter = new AtomicLong();
  
     @RequestMapping("/home")
     public String homePage(Model model) {
@@ -46,64 +39,34 @@ public class MangoController {
         return "home";
     }
     
-//    @GetMapping("/title/{mangoTitle}")
-//    public Mango findMango(@PathVariable String mangoTitle) {
-//        return mangoRepo.findByMangoTitle(mangoTitle);
-//    }
-    
-    @CrossOrigin
-    @GetMapping("/completedMangoes")
-    List<Mango> getMangoes() {
-    	return mangoService.getCompletedMangoes();	
+    @GetMapping("/title/{mangoTitle}")
+    public Mango findMango(@PathVariable String mangoTitle) {
+        return mangoRepo.findByMangoTitle(mangoTitle);
     }
     
-    @CrossOrigin
-    @GetMapping("/ongoingMangoes")
-    List<Mango> getOngoingMangoes() {
-    	return mangoService.getOngoingMangoes();	
+    @GetMapping("/mangoes")
+    public Iterable<Mango> getMangoes() {
+    	return mangoRepo.findAll();	
     }
     
 //    @GetMapping("/addmango")
-//    public String showMangoForm(Model model) 
-//    {
-//    	model.addAttribute("appName", appName);
-//    	return "mangoForm";
-//    }
-    
-//    @GetMapping("/mango")
-//    @CrossOrigin
-//    public Mango getMango(@RequestParam(value = "title", defaultValue = "Naruto") String title) 
-//    {
-//    	return findMango(title);
-//    	
-//    }
-    @CrossOrigin
-    @PostMapping("/completedMango")
-    Mango completedMango(@RequestBody Mango mango) 
+    public String showMangoForm(Model model) 
     {
-       return mangoService.completedMangoBuilder(mango);
+    	model.addAttribute("appName", appName);
+    	return "mangoForm";
     }
     
-    @CrossOrigin
-    @PutMapping("/updateBacklog")
-    OngoingMango updateBacklog(@RequestBody OngoingMango mango) 
+    @GetMapping("/mango")
+    public Mango getMango(@RequestParam(value = "title", defaultValue = "Naruto") String title) 
     {
-       return mangoService.backlogMangoBuilder(mango);
+    	return findMango(title);
+    	
     }
     
-    @CrossOrigin
-    @PostMapping("/newMango")
-    OngoingMango newMango(@RequestBody OngoingMango mango) 
+    @PostMapping("/addmango")
+    public Mango newMango(@RequestBody Mango mango) 
     {
-       return mangoService.newMangoBuilder(mango);
-    }
-    
-    
-    @CrossOrigin
-    @GetMapping("/getMangoInfo/{mangoTitle}")
-    void updateBacklog(@PathVariable String mangoTitle) 
-    {
-    	anilist.getMangoInfo(mangoTitle);
+      return mangoRepo.save(mango);
     }
     
 } 
