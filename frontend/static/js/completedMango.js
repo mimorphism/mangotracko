@@ -4,6 +4,12 @@ const mangoChild = document.querySelector('.row.active-with-click');
 const COMPLETION_DATE_LITERAL = "COMPLETION DATE: <br>";
 const API_URL = 'http://localhost:8081';
 var DateTime = luxon.DateTime;
+// Get the header
+var header = document.querySelector('.header');
+// var header = document.getElementById(".header");
+// Get the offset position of the navbar
+// var sticky = header.offsetTop;
+
 // const mango = {
 //     mangoTitle: '',
 //     img: '',
@@ -69,25 +75,19 @@ function listAllMangoes() {
         })
         .catch(err => console.error(err.message));
 }
-// window.addEventListener('scroll', function(){
-//     var header = document.querySelector('.test');
-//     header.classList.toggle('sticky', window.scrollY > 0);
-//  });
+window.addEventListener('scroll', function(){
+    // var header = document.querySelector('.test');
+    header.classList.toggle('sticky', window.scrollY > 0);
+ });
 
 // When the user scrolls the page, execute myFunction
-window.onscroll = function() {myFunction()};
-
-// Get the header
-var header = document.getElementById("Header");
-
-// Get the offset position of the navbar
-var sticky = header.offsetTop;
+// window.onscroll = function() {myFunction()};
 
 // Add the sticky class to the header when you reach its scroll position. Remove "sticky" when you leave the scroll position
-function myFunction() {
-  if (window.pageYOffset > sticky) {
-    header.classList.add("sticky");
-  } else {
-    header.classList.remove("sticky");
-  }
-} 
+// function myFunction() {
+//   if (window.pageYOffset > sticky) {
+//     header.classList.add("sticky");
+//   } else {
+//     header.classList.remove("sticky");
+//   }
+// } 

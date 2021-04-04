@@ -5,7 +5,7 @@ const LAST_DATE_READ = "LAST READ: <br>";
 const LAST_CHAPTER_READ = "LAST CHAPTER: <br>";
 const API_URL = 'http://localhost:8081';
 var DateTime = luxon.DateTime;
-
+var header = document.querySelector('.header');
 
 let loading = false;
 let skip = 0;
@@ -74,3 +74,7 @@ function listAllMangoes() {
         })
         .catch(err => console.error(err.message));
 }
+window.addEventListener('scroll', function(){
+    // var header = document.querySelector('.test');
+    header.classList.toggle('sticky', window.scrollY > 0);
+ });

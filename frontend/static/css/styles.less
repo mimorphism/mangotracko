@@ -129,34 +129,51 @@ a {
   }
 }
 
-.test {
+// .header {
+//   width: 100%;
+//   border-bottom: 1px solid white;
+//   text-align: right;
+//   position: relative;
   
   
+// }
+// .header .logo {
+//   position: absolute;
+//   display: inline-block;
+//   top: 0;
+//   left: 0;
+//   text-decoration: none;
+//   text-transform: uppercase;
+//   color: #0f0f0f;
+//   font-size: 32px;
+//   font-weight: 800;
+//   padding: 26px;
+//   border-right: 1px solid white;
+// }
+
+.header {
   width: 100%;
-  padding: 0.5px 10px;
-  // z-index: 1000;
+  padding: 0.5px 8px;
+  z-index: 1000;
   display: flex;
   justify-content: space-between;
-  // align-items: center;
-  /* background-color: black; */
-  // background:black;
-  // width: 100%;
-  border-bottom: 2px solid white;
+  border-bottom: 1px solid white;
   text-align: right;
   position: fixed;
   height: 90px;
+  line-height:55px;
     
 }
-.test.sticky {
-  background:black;
+.header.sticky {
+  //  background:black;
   // padding: 20px 100px;
   padding: 0.5px 10px;
   top: 0;
-  width: 100%
-  /* box-shadow: 0 5px 20px rgba(0,0,0,0.1); */
+  width: 100%;
+  background: #757575;
 }
 
-.test .logo{
+.header .logo{
   // color: #fff;
   // font-size: 24px;
   // text-transform: uppercase;
@@ -169,81 +186,55 @@ a {
   left: 0;
   text-decoration: none;
   text-transform: uppercase;
-  color: #0f0f0f;
+  color: black;
   font-size: 32px;
   font-weight: 800;
   padding: 20px;
   border-right: 1px solid white;
 }
 
-.test.sticky .logo {
+.header.sticky .logo {
   color:white;
 } 
 
-.test ul{
+.header ul{
   position: relative;
   display: flex;
   
 }
 
-.test ul li{
+.header ul li{
   position: relative;
   list-style: none;
  
 
 }
 
-.test ul li a{
-  // position: relative;
-  // display: inline-block;
-  // margin: 0 15px;
-  // color: #fff;
-  // text-decoration: none;
+.header ul li a{
+  
   display: inline-block;
-  padding: 20px 0;
-  margin: 20px 25px;
+  padding: 12px 0;
+  margin: 12px 25px;
   position: relative;
   text-decoration: none;
   text-transform: uppercase;
   color: #0f0f0f;
   font-weight: 800;
   font-size: 24px;
-  line-height:3px;
+  // line-height:0px;
   text-align: center;
   letter-spacing: 2px;
  
 }
 
 
-.test.sticky ul li a{
+.header.sticky ul li a{
   color:white;
-
- 
 }
 
 
 
-.header {
-  width: 100%;
-  border-bottom: 1px solid white;
-  text-align: right;
-  position: relative;
-  
-  
-}
-.header .logo {
-  position: absolute;
-  display: inline-block;
-  top: 0;
-  left: 0;
-  text-decoration: none;
-  text-transform: uppercase;
-  color: #0f0f0f;
-  font-size: 32px;
-  font-weight: 800;
-  padding: 26px;
-  border-right: 1px solid white;
-}
+
 .link {
   display: inline-block;
   padding: 15px 0;
