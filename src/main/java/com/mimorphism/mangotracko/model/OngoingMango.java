@@ -24,7 +24,7 @@ public class OngoingMango
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="backlog_seq")
-	@SequenceGenerator(name = "backlog_seq")
+	@SequenceGenerator(name = "backlog_seq", allocationSize=1)
 	@Column(name="BACKLOG_ID")
 	private Long backlogID;
 	
