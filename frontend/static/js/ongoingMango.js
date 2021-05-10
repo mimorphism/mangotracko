@@ -6,6 +6,8 @@ const LAST_CHAPTER_READ = "LAST CHAPTER: <br>";
 const API_URL = 'http://localhost:8081';
 var DateTime = luxon.DateTime;
 var header = document.querySelector('.header');
+const GOOGLE_SEARCH_URL = 'https://www.google.com/search?q=';
+
 
 let loading = false;
 let skip = 0;
@@ -13,15 +15,18 @@ let finished = false;
 
 
 
+function searchMango(event){
+    var link = GOOGLE_SEARCH_URL + 'read ' + event.target.id;
+    window.open(link,'_blank');
+}
 listAllMangoes();
-
 
 function listAllMangoes() {
     let mangoTitle = '';
     let img = '';
     let author = '';
     let ongoingMangoInfo = '';
-
+    
 
     axios.get(API_URL + '/ongoingMangoes')
         .then(response => {
@@ -29,8 +34,8 @@ function listAllMangoes() {
             for(var i = 0;i < response.data.length; i++)
             {
                 mangoTitle = response.data[i].mangoTitle;
-                ongoingMangoInfo =  LAST_DATE_READ + DateTime.fromISO(response.data[i].ongoingMango.lastReadTime).toFormat('EEE LLL yyyy h:mm a')
-                + '<br><br>' + LAST_CHAPTER_READ + response.data[i].ongoingMango.lastChapterRead;;
+                ongoingMangoInfo =  LAST_DATE_READ + DateTime.fromISO(response.data[i].ongoingMango.lastReadTime).toFormat('EEE d LLL yyyy h:mm a')
+                + '<br><br>' + LAST_CHAPTER_READ + response.data[i].ongoingMango.lastChapterRead;
                 img = response.data[i].img;
                 author = response.data[i].author;
                 localStorage.setItem(mangoTitle, JSON.stringify(response.data[i].ongoingMango));
@@ -39,7 +44,7 @@ function listAllMangoes() {
                 <article class="material-card Grey">
                     <div class="mc-content">
                         <div class="img-container">
-                            <img class="img-responsive" src=${img}>
+                            <img class="img-responsive" id="${mangoTitle}" src=${img}>
                         </div>
                         <h2 class="contentH2">
                         <a href="addMango.html?title=${mangoTitle}"><span>${mangoTitle}</span></a>
@@ -57,6 +62,8 @@ function listAllMangoes() {
                     </a>
                 </article>
             </div>`);
+            
+            document.getElementById(mangoTitle).addEventListener("click", searchMango);
             }
 
             $(function() {
@@ -71,6 +78,7 @@ function listAllMangoes() {
                 // }, 2000);
             
             });
+            
         })
         .catch(err => console.error(err.message));
 }
@@ -78,3 +86,6 @@ window.addEventListener('scroll', function(){
     // var header = document.querySelector('.test');
     header.classList.toggle('sticky', window.scrollY > 0);
  });
+
+ 
+
