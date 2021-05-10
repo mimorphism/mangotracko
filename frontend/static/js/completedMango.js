@@ -36,7 +36,7 @@ function listAllMangoes() {
             for(var i = 0;i < response.data.length; i++)
             {
                 mangoTitle = response.data[i].mangoTitle;
-                completionDate =  COMPLETION_DATE_LITERAL + DateTime.fromISO(response.data[i].completionDateTime).toFormat('EEE LLL yyyy h:mm a');
+                completionDate =  COMPLETION_DATE_LITERAL + DateTime.fromISO(response.data[i].completionDateTime).toFormat('EEE d LLL yyyy h:mm a');
                 img = response.data[i].img;
                 author = response.data[i].author;
                 mangoChild.insertAdjacentHTML('beforeend', 
