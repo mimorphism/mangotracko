@@ -6,6 +6,8 @@ const loadingElement = document.querySelector('.loading');
 const mewsElement = document.querySelector('.mews');
 const loadMoreElement = document.querySelector('loadMore');
 const API_URL = 'https://localhost:sumport'
+var header = document.querySelector('.header');
+
 
 let skip = 0;
 let limit = 5;
@@ -18,14 +20,11 @@ loadMoreElement.style.visibility = 'hidden';
 
 
 
-document.addEventListener('scroll', () => {
-  const rect = loadMoreElement.getBoundingClientRect();
-  if (rect.top < window.innerHeight && !loading && !finished) {
-    loadMore();
-  }
-  var header = document.querySelector('test');
-          header.classList.toggle('sticky', window.scrollY > 0);
+window.addEventListener('scroll', function(){
+  // var header = document.querySelector('.test');
+  header.classList.toggle('sticky', window.scrollY > 0);
 });
+
 
 
 form.addEventListener('submit', (event) => {
