@@ -3,7 +3,7 @@ const mangoesElement = document.querySelector('.mangoes');
 const mangoChild = document.querySelector('.row.active-with-click');
 const LAST_DATE_READ = "LAST READ: <br>";
 const LAST_CHAPTER_READ = "LAST CHAPTER: <br>";
-const API_URL = 'http://localhost:8081';
+const API_URL = 'http://192.168.1.3:8081';
 var DateTime = luxon.DateTime;
 var header = document.querySelector('.header');
 const GOOGLE_SEARCH_URL = 'https://www.google.com/search?q=';
