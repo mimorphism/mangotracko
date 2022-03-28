@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "coverImage",
+    "bannerImage",
     "title",
     "staff"
 })
@@ -22,7 +23,9 @@ public class Media {
 
     @JsonProperty("coverImage")
     private CoverImage coverImage;
-    @JsonProperty("title")
+    @JsonProperty("bannerImage")
+    private String bannerImage;
+	@JsonProperty("title")
     private Title title;
     @JsonProperty("staff")
     private Staff staff;
@@ -58,6 +61,17 @@ public class Media {
     public void setStaff(Staff staff) {
         this.staff = staff;
     }
+    
+    @JsonProperty("bannerImage")
+    public String getBannerImage() {
+		return bannerImage;
+	}
+
+    @JsonProperty("bannerImage")
+	public void setBannerImage(String bannerImage) {
+		this.bannerImage = bannerImage;
+	}
+
 
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {

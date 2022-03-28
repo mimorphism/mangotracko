@@ -41,8 +41,11 @@ public class Mango {
     @Column(name="REMARKS")
     private String remarks;
     
-    @Column(name="IMG_PATH")
+    @Column(name="CVR_IMG_PATH")
     private String img;
+    
+    @Column(name="BNR_IMG_PATH")
+    private String bannerImg;
     
     @Column(name="AUTHOR")
     private String author;

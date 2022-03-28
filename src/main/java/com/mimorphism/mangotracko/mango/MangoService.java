@@ -93,4 +93,17 @@ public class MangoService{
 		return mangoRepo.findByMangoTitle(mangoTitle);
 	}
 
+	public OngoingMango getOngoingMango(String mangoTitle) {
+		return ongoingMangoRepo.findByMangoTitle(mangoTitle);
+	}
+
+	public Mango saveMango(Mango mango) 
+	{
+		return mangoRepo.save(mango);
+	}
+	
+	public OngoingMango saveOngoingMango(OngoingMango mango) 
+	{
+		return ongoingMangoRepo.save(mango);
+	}
 }
