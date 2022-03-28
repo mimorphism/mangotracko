@@ -1,0 +1,19 @@
+query ($title: String!) {
+Media (search: $title , format: MANGA) 
+{
+    coverImage {
+      large
+    }
+    bannerImage
+    title {
+      romaji
+    }
+     staff{
+        nodes {
+          name {
+            full
+          }
+          description
+        }
+    
+    }}}
