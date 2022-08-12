@@ -2,24 +2,31 @@ package com.mimorphism.mangotracko.appuser;
 
 import lombok.AllArgsConstructor;
 
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.mimorphism.mangotracko.exception.UserNotFoundException;
 import com.mimorphism.mangotracko.registration.token.ConfirmationToken;
 import com.mimorphism.mangotracko.registration.token.ConfirmationTokenService;
 
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class AppUserService implements UserDetailsService {
 
     private final static String USER_NOT_FOUND_MSG =
-            "user with email %s not found";
+            "user with username %s not found";
 
     private final AppUserRepo appUserRepo;
     
@@ -27,24 +34,32 @@ public class AppUserService implements UserDetailsService {
     private final ConfirmationTokenService confirmationTokenService;
 
     @Override
-    public UserDetails loadUserByUsername(String email)
+    public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
-        return appUserRepo.findByEmail(email)
+        return appUserRepo.findByUsername(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(
-                                String.format(USER_NOT_FOUND_MSG, email)));
+                                String.format(USER_NOT_FOUND_MSG, username)));
+    }
+    
+    public AppUser getUser(String username) 
+    throws UserNotFoundException
+    {
+    	return appUserRepo.findByUsername(username).
+    			orElseThrow(() -> 
+    					new UserNotFoundException(String.format(USER_NOT_FOUND_MSG, username)));
     }
 
     public String signUpUser(AppUser appUser) {
         boolean userExists = appUserRepo
-                .findByEmail(appUser.getEmail())
+                .findByUsername(appUser.getUsername())
                 .isPresent();
 
         if (userExists) {
             // TODO check of attributes are the same and
             // TODO if email not confirmed send confirmation email.
 
-            throw new IllegalStateException("email already taken");
+            throw new IllegalStateException("user already taken");
         }
 
         String encodedPassword = bCryptPasswordEncoder
@@ -54,14 +69,30 @@ public class AppUserService implements UserDetailsService {
 
         appUserRepo.save(appUser);
 
-        String token = UUID.randomUUID().toString();
+//        String token = UUID.randomUUID().toString();
+//
+//        ConfirmationToken confirmationToken = new ConfirmationToken(
+//                token,
+//                LocalDateTime.now(),
+//                LocalDateTime.now().plusMinutes(15),
+//                appUser
+//        );
+		Algorithm algo = Algorithm.HMAC256("secret".getBytes());
 
-        ConfirmationToken confirmationToken = new ConfirmationToken(
-                token,
-                LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(15),
-                appUser
-        );
+        String token = JWT.create()
+        		.withSubject(appUser.getUsername())
+				.withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 *  1000))
+				.withIssuer("MANGOTRACKO")
+				.withClaim("roles", appUser.getAuthorities().stream().map(GrantedAuthority::getAuthority).
+						collect(Collectors.toList()))
+				.sign(algo);
+        
+      ConfirmationToken confirmationToken = new ConfirmationToken(
+      token,
+      LocalDateTime.now(),
+      LocalDateTime.now().plusMinutes(10),
+      appUser
+);
 
         confirmationTokenService.saveConfirmationToken(
                 confirmationToken);
@@ -71,7 +102,10 @@ public class AppUserService implements UserDetailsService {
         return token;
     }
 
-    public int enableAppUser(String email) {
+	public int enableAppUser(String email) {
         return appUserRepo.enableAppUser(email);
     }
+    
+
+    
 }
