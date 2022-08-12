@@ -1,5 +1,5 @@
 
-package com.mimorphism.mangotracko.mango.mangoinfo.model.anilist;
+package com.mimorphism.mangotracko.mango.mangoinfo.anilist;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,13 +10,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.mimorphism.mangotracko.mango.MangoStatus;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "coverImage",
     "bannerImage",
     "title",
-    "staff"
+    "staff",
+    "status",
+    "chapters"
 })
 @Generated("jsonschema2pojo")
 public class Media {
@@ -29,7 +32,15 @@ public class Media {
     private Title title;
     @JsonProperty("staff")
     private Staff staff;
-    @JsonIgnore
+    @JsonProperty("status")
+    private MangoStatus status;
+    @JsonProperty("chapters")
+    private Integer lastChapter;
+    @JsonProperty("id")
+    private Long anilistId;
+    
+
+	@JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("coverImage")
@@ -71,6 +82,37 @@ public class Media {
 	public void setBannerImage(String bannerImage) {
 		this.bannerImage = bannerImage;
 	}
+    
+    @JsonProperty("status")
+    public MangoStatus getStatus() {
+		return status;
+	}
+
+    @JsonProperty("status")
+    public MangoStatus setStatus(MangoStatus status) {
+		return this.status = status;
+	}
+    
+    @JsonProperty("chapters")
+    public Integer getLastChapter() {
+		return lastChapter;
+	}
+
+    @JsonProperty("chapters")
+	public void setLastChapter(Integer lastChapter) {
+		this.lastChapter = lastChapter;
+	}
+    
+    @JsonProperty("id")
+    public Long getAnilistId() {
+		return anilistId;
+	}
+    
+    @JsonProperty("id")
+	public void setAnilistId(Long anilistId) {
+		this.anilistId = anilistId;
+	}
+
 
 
     @JsonAnyGetter
