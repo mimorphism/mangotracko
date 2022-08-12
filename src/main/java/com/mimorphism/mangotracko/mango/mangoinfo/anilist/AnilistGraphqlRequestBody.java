@@ -1,5 +1,5 @@
 
-package com.mimorphism.mangotracko.mango.mangoinfo.anilist;
+package com.mimorphism.mangotracko.mango;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

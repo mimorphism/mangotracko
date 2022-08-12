@@ -13,10 +13,7 @@ Media (search: $title , format: MANGA)
           name {
             full
           }
+          description
         }
     
-    }
-    status
-    chapters
-    id
-    }}
+    }}}

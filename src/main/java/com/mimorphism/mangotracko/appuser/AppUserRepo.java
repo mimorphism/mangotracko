@@ -13,11 +13,12 @@ import java.util.Optional;
 public interface AppUserRepo
         extends PagingAndSortingRepository<AppUser, Long> {
 
-    Optional<AppUser> findByUsername(String username);
+    Optional<AppUser> findByEmail(String email);
 
     @Transactional
-    @Modifying(clearAutomatically = true)
-    @Query("UPDATE AppUser a SET a.enabled = TRUE WHERE a.username = ?1")
-    int enableAppUser(String username);
-    
+    @Modifying
+    @Query("UPDATE AppUser a " +
+            "SET a.enabled = TRUE WHERE a.email = ?1")
+    int enableAppUser(String email);
+
 }

@@ -1,5 +1,5 @@
 
-package com.mimorphism.mangotracko.mango.mangoinfo.anilist;
+package com.mimorphism.mangotracko.mango.mangoinfo.model.anilist;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,8 +20,7 @@ public class MangoInfo {
 
     @JsonProperty("data")
     private Data data;
-   
-	@JsonIgnore
+    @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("data")

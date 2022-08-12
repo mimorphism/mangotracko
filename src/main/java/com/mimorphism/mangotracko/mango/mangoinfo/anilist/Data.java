@@ -1,5 +1,5 @@
 
-package com.mimorphism.mangotracko.mango.mangoinfo.anilist;
+package com.mimorphism.mangotracko.mango.mangoinfo.model.anilist;
 
 import java.util.HashMap;
 import java.util.Map;
