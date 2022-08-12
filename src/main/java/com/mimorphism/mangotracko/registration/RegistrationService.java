@@ -20,21 +20,22 @@ public class RegistrationService {
     private final AppUserService appUserService;
     private final EmailValidator emailValidator;
     private final ConfirmationTokenService confirmationTokenService;
-    private final EmailSender emailSender;
+    private static final String REGISTRATION_SUCCESSFUL = "Registration is succesful!";
+//    private final EmailSender emailSender;
 
     public String register(RegistrationRequest request) {
-        boolean isValidEmail = emailValidator.
-                test(request.getEmail());
+//        boolean isValidEmail = emailValidator.
+//                test(request.getEmail());
+//
+//        if (!isValidEmail) {
+//            throw new IllegalStateException("email not valid");
+//        }
 
-        if (!isValidEmail) {
-            throw new IllegalStateException("email not valid");
-        }
-
-        String token = appUserService.signUpUser(
+//        String token = 
+        		
+        appUserService.signUpUser(
                 new AppUser(
-                        request.getFirstName(),
-                        request.getLastName(),
-                        request.getEmail(),
+                        request.getUsername(),
                         request.getPassword(),
                         AppUserRole.USER
 
@@ -45,8 +46,9 @@ public class RegistrationService {
 //        emailSender.send(
 //                request.getEmail(),
 //                buildEmail(request.getFirstName(), link));
-
-        return token;
+        appUserService.enableAppUser(request.getUsername());
+               
+        return REGISTRATION_SUCCESSFUL;
     }
 
     @Transactional
@@ -57,7 +59,7 @@ public class RegistrationService {
                         new IllegalStateException("token not found"));
 
         if (confirmationToken.getConfirmedAt() != null) {
-            throw new IllegalStateException("email already confirmed");
+            throw new IllegalStateException("user already confirmed");
         }
 
         LocalDateTime expiredAt = confirmationToken.getExpiresAt();
@@ -68,7 +70,7 @@ public class RegistrationService {
 
         confirmationTokenService.setConfirmedAt(token);
         appUserService.enableAppUser(
-                confirmationToken.getAppUser().getEmail());
+                confirmationToken.getAppUser().getUsername());
         return "confirmed";
     }
 
