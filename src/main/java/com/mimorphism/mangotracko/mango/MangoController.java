@@ -312,7 +312,7 @@ public class MangoController {
 				Optional<ActiveJWT> userActiveJWT = activeJWTService.getActiveJWTForUser(username);
 				if (userActiveJWT.isPresent() && userActiveJWT.get().getRefreshToken().equals(refreshToken)) {
 					AppUser user = userService.getUser(username);
-					String accessToken = SecurityUtil.generateAccessToken(request, user);
+					String accessToken = SecurityUtil.generateAccessToken(request.getRequestURL().toString(), user);
 					activeJWTService.setActiveJWTForUser(username, accessToken, userActiveJWT.get().getRefreshToken());
 					Map<String, String> tokens = new HashMap<>();
 					tokens.put("user", user.getUsername());
