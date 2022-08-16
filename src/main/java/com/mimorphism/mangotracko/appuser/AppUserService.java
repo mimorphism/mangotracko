@@ -14,6 +14,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.mimorphism.mangotracko.exception.UserNotFoundException;
 import com.mimorphism.mangotracko.registration.token.ConfirmationToken;
 import com.mimorphism.mangotracko.registration.token.ConfirmationTokenService;
+import com.mimorphism.mangotracko.util.SecurityUtil;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -58,7 +59,6 @@ public class AppUserService implements UserDetailsService {
         if (userExists) {
             // TODO check of attributes are the same and
             // TODO if email not confirmed send confirmation email.
-
             throw new IllegalStateException("user already taken");
         }
 
@@ -77,16 +77,8 @@ public class AppUserService implements UserDetailsService {
 //                LocalDateTime.now().plusMinutes(15),
 //                appUser
 //        );
-		Algorithm algo = Algorithm.HMAC256("secret".getBytes());
 
-        String token = JWT.create()
-        		.withSubject(appUser.getUsername())
-				.withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 *  1000))
-				.withIssuer("MANGOTRACKO")
-				.withClaim("roles", appUser.getAuthorities().stream().map(GrantedAuthority::getAuthority).
-						collect(Collectors.toList()))
-				.sign(algo);
-        
+      String token = SecurityUtil.generateAccessToken("mangotracko", appUser);
       ConfirmationToken confirmationToken = new ConfirmationToken(
       token,
       LocalDateTime.now(),
