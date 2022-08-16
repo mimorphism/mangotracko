@@ -1,6 +1,7 @@
 package com.mimorphism.mangotracko.exception.handler;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,13 +15,13 @@ import lombok.Data;
 public class ApiError {
 
 	   private HttpStatus status;
+	
+	   private String timestamp;
 	   
-	   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
-	   private LocalDateTime timestamp;
 	   private List<String> message;
 
 	   private ApiError() {
-	       timestamp = LocalDateTime.now();
+		  this.timestamp =  LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss"));
 	   }
 	   
 	   public ApiError(HttpStatus status, String message) {
