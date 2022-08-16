@@ -20,6 +20,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.mimorphism.mangotracko.appuser.AppUser;
 import com.mimorphism.mangotracko.exception.handler.ApiError;
 
@@ -45,7 +46,7 @@ public final class SecurityUtil {
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		response.setStatus(statusCode.value());
 		try {
-			new ObjectMapper().writeValue(response.getOutputStream(), responseBody);
+			new ObjectMapper().writeValue(response.getOutputStream(),responseBody);
 		} catch (JsonGenerationException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
@@ -57,20 +58,20 @@ public final class SecurityUtil {
 	
 	
 	//7800 access token, 8800 refresh token
-	public static String generateAccessToken(HttpServletRequest request, AppUser user) {
+	public static String generateAccessToken(String issuerURL, AppUser user) {
 		String accessToken = JWT.create().withSubject(user.getUsername())
 				.withExpiresAt(new Date(System.currentTimeMillis() + 7800 * 60 * 1000))
-				.withIssuer(request.getRequestURL().toString())
+				.withIssuer(issuerURL)
 				.withClaim("roles",
 						user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
 				.sign(getAlgorithm());
 		return accessToken;
 	}
 	
-	public static String generateRefreshToken(HttpServletRequest request, AppUser user) {
+	public static String generateRefreshToken(String issuerURL, AppUser user) {
 		String refreshToken = JWT.create().withSubject(user.getUsername())
 				.withExpiresAt(new Date(System.currentTimeMillis() + 8800 * 60 * 1000))
-				.withIssuer(request.getRequestURL().toString())
+				.withIssuer(issuerURL)
 				.withClaim("roles",
 						user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
 				.sign(getAlgorithm());
