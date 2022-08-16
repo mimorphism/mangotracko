@@ -125,8 +125,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 			Authentication authResult) throws IOException, ServletException {
 		try {
 			AppUser user = (AppUser) authResult.getPrincipal();
-			String accessToken = SecurityUtil.generateAccessToken(request, user);
-			String refreshToken = SecurityUtil.generateRefreshToken(request, user);
+			String accessToken = SecurityUtil.generateAccessToken(request.getRequestURL().toString(), user);
+			String refreshToken = SecurityUtil.generateRefreshToken(request.getRequestURL().toString(), user);
 			
 			if (isAuthenticated(user.getUsername())) {
 //				throw new AlreadyLoggedinException(String.format("User: %s - Your existing session has been terminated.", user.getUsername()), user.getUsername());
