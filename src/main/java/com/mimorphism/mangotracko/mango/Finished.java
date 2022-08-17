@@ -46,11 +46,11 @@ public class Finished implements MangoRecordType {
 	@JsonManagedReference
 	private Mango mango;
 	
-	@Column(name="COMPLETION_DATE")
+	@Column(name="COMPLETION_DATE", nullable=false)
 	@NotNull
 	private String completionDateTime;    
   
-	@Column(name="REMARKS")
+	@Column(name="REMARKS", nullable=false)
 	@NotNull
 	private String remarks;
 	

@@ -49,7 +49,7 @@ public class CurrentlyReading implements MangoRecordType{
 	@NotNull
 	private int lastChapterRead;
 	
-    @Column(name="LAST_READ_TIME")
+    @Column(name="LAST_READ_TIME", nullable=false)
     @NotNull
 	private String lastReadTime;
 	

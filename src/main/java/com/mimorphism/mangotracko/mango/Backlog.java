@@ -45,7 +45,6 @@ public class Backlog implements MangoRecordType {
 	@JsonManagedReference
 	private Mango mango;
 	
-    @Column(name="ADDED_DATETIME")
-    @NotNull
+    @Column(name="ADDED_DATETIME", nullable=false)
 	private String addedDateTime;	
 }
