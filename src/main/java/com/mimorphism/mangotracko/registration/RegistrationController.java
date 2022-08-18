@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
+import java.util.HashMap;
 import java.util.Locale;
 
 import javax.validation.Valid;
@@ -33,8 +34,9 @@ public class RegistrationController {
     @PostMapping
     ResponseEntity<?> register(@Valid @RequestBody  RegistrationRequest request) {
     	try 
-    	{
-    		return ResponseEntity.ok().body(registrationService.register(request));
+    	{	HashMap<String, String> map = new HashMap<>();
+        	map.put("message", registrationService.register(request));
+    		return ResponseEntity.ok().body(map);
 
     	}catch(IllegalStateException ex) 
     	{
