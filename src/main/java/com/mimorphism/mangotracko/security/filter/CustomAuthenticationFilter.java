@@ -110,7 +110,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
 		}
 		else if (failed instanceof UserNotFoundException) {
-			log.error(String.format("User doesn't exist: {}", failed.getMessage()));
+			log.error(String.format("User doesn't exist: {%s", failed.getMessage()));
 			SecurityUtil.writeResponse(response, BAD_REQUEST, String.format(failed.getMessage()));
 		}
 		else if (failed instanceof BadCredentialsException) {
