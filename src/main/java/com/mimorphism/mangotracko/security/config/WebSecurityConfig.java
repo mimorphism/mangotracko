@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -38,8 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final CustomLogoutHandler customLogoutHandler;
 	private final ActiveJWTService activeJWTService;
-
-    
+	
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 //        http
@@ -64,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     	http.cors().configurationSource(request -> {
     	      var cors = new CorsConfiguration();
 //    	      cors.setAllowedOrigins(List.of("http://localhost:3000", "http://127.0.0.1:80", "http://example.com"));//EXAMPLE OF ALLOWED ORIGINS
-    	      cors.setAllowedOrigins(List.of("http://localhost:3000", "http://192.168.0.2:3000"));
+    	      cors.setAllowedOrigins(List.of("http://192.168.0.2:3000", "http://localhost:3000", "https://mangotracko.netlify.app"));
     	      cors.setAllowedMethods(List.of("GET","POST", "PUT", "DELETE"));
     	      cors.setAllowedHeaders(List.of("*"));
     	      return cors;
