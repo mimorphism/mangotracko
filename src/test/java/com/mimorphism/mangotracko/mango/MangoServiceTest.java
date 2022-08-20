@@ -1,18 +1,12 @@
 package com.mimorphism.mangotracko.mango;
 
-import static org.junit.Assert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.assertj.core.api.InstanceOfAssertFactories;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
 import com.mimorphism.mangotracko.appuser.AppUser;
@@ -25,15 +19,12 @@ import com.mimorphism.mangotracko.mango.dto.BacklogDTO;
 import com.mimorphism.mangotracko.mango.dto.CurrentlyReadingDTO;
 import com.mimorphism.mangotracko.mango.dto.DeleteRecordDTO;
 import com.mimorphism.mangotracko.mango.dto.FinishedDTO;
-import com.mimorphism.mangotracko.mango.mangoinfo.anilist.CoverImage;
 import com.mimorphism.mangotracko.mango.mangoinfo.anilist.Data;
 import com.mimorphism.mangotracko.mango.mangoinfo.anilist.MangoInfo;
 import com.mimorphism.mangotracko.mango.mangoinfo.anilist.Media;
-import com.mimorphism.mangotracko.mango.mangoinfo.anilist.Staff;
 import com.mimorphism.mangotracko.util.MangoUtil;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
