@@ -1,9 +1,14 @@
 package com.mimorphism.mangotracko.mango;
 
+import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,6 +28,10 @@ import com.mimorphism.mangotracko.mango.dto.CurrentlyReadingDTO;
 import com.mimorphism.mangotracko.mango.dto.DeleteRecordDTO;
 import com.mimorphism.mangotracko.mango.dto.FinishedDTO;
 import com.mimorphism.mangotracko.mango.mangoinfo.anilist.MangoInfo;
+import com.mimorphism.mangotracko.mango.userstats.pojo.GeneralStats;
+import com.mimorphism.mangotracko.mango.userstats.pojo.MostRecentUpdatesStats;
+import com.mimorphism.mangotracko.mango.userstats.pojo.RecordCountStat;
+import com.mimorphism.mangotracko.mango.userstats.pojo.UserStats;
 import com.mimorphism.mangotracko.util.MangoUtil;
 
 import lombok.AllArgsConstructor;
@@ -50,6 +59,10 @@ public class MangoService {
 	private static final String INVALID_OPERATION = "MangoService.INVALID_OPERATION_EXCEPTION";
 	
 	private static final String MANGO_ALREADY_EXISTS_IN_CTLYREADING = "MangoService.MANGO_ALREADY_EXISTS_IN_CURRENTLYREADINGRECORD";
+	
+	private static final Double READING_DAYS_MULTIPLIER = 0.00556;
+	
+	private static final DecimalFormat df = new DecimalFormat("0.00");
 	
 	
 	public List<Finished> getFinished(String userName, int page, int size) {
@@ -255,6 +268,69 @@ public class MangoService {
 		return Stream.of(backlog,ctlyReading,finished)
 				.flatMap(Collection::stream).collect(Collectors.toList());		
 	}
+	
+	
+	public UserStats getUserStats(String userName) {
+		AppUser user = appUserService.getUser(userName);
+		UserStats stats = new UserStats();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(MangoUtil.APP_ISO_DATETIME_FORMAT);
+		int totalChapters = 0;
+
+		
+		List<Backlog> backlog = backlogRepo.findByUserId(user.getId()).stream()
+	            .sorted((u1, u2) -> LocalDate.parse(u1.getAddedDateTime(), formatter).compareTo(LocalDate.parse(u2.getAddedDateTime(), formatter)))
+	            .collect(Collectors.toList());	            
+		List<CurrentlyReading> ctlyReading = currentlyReadingRepo.findByUserId(user.getId()).stream()
+	            .sorted((u1, u2) -> LocalDate.parse(u1.getLastReadTime(), formatter).compareTo(LocalDate.parse(u2.getLastReadTime(), formatter)))
+	            .collect(Collectors.toList());	            
+		List<Finished> finished = finishedRepo.findByUserId(user.getId()).stream()
+	            .sorted((u1, u2) -> LocalDate.parse(u1.getCompletionDateTime(), formatter).compareTo(LocalDate.parse(u2.getCompletionDateTime(), formatter)))
+	            .collect(Collectors.toList());	            
+		
+		Map<String, RecordCountStat> dailyStats = new HashMap<>(Map.of(
+				LocalDate.now().toString(), new RecordCountStat(0,0,0), 
+				LocalDate.now().minusDays(1).toString(), new RecordCountStat(0,0,0), 
+				LocalDate.now().minusDays(2).toString(), new RecordCountStat(0,0,0),  
+				LocalDate.now().minusDays(3).toString(), new RecordCountStat(0,0,0),  
+				LocalDate.now().minusDays(4).toString(), new RecordCountStat(0,0,0), 
+				LocalDate.now().minusDays(5).toString(), new RecordCountStat(0,0,0), 
+				LocalDate.now().minusDays(6).toString(), new RecordCountStat(0,0,0)));
+
+
+		for(CurrentlyReading record: ctlyReading) {
+			totalChapters += record.getLastChapterRead();
+			
+			if(isRecordDateWithinDailyStatsRange(record.getLastReadTime(), formatter)) {
+				dailyStats.get(LocalDate.parse(record.getLastReadTime(), formatter).toString())
+				.setCtlyReading(dailyStats.get(LocalDate.parse(record.getLastReadTime(),formatter).toString()).getCtlyReading() + 1);
+			}
+			
+			
+		}
+		for(Finished record: finished) {
+			totalChapters += record.getMango().getLastChapter().get();
+			if(isRecordDateWithinDailyStatsRange(record.getCompletionDateTime(), formatter)) {
+				dailyStats.get(LocalDate.parse(record.getCompletionDateTime(), formatter).toString())
+				.setFinished(dailyStats.get(LocalDate.parse(record.getCompletionDateTime(),formatter).toString()).getFinished() + 1);
+			}
+			
+		}
+		
+		for(Backlog record: backlog) {
+			if(isRecordDateWithinDailyStatsRange(record.getAddedDateTime(), formatter)) {
+				dailyStats.get(LocalDate.parse(record.getAddedDateTime(), formatter).toString())
+				.setBacklog(dailyStats.get(LocalDate.parse(record.getAddedDateTime(),formatter).toString()).getBacklog() + 1);
+			}
+		}
+		
+		
+		stats.setGeneralStats(getGeneralStats(backlog, ctlyReading, finished, totalChapters));
+		stats.setMostRecentUpdateStats(getMostRecentUpdateStats(backlog, ctlyReading, finished));
+		stats.setDailyStats(dailyStats);
+		return stats;
+	}
+
+	
 	
 	  /***********************/
 	  /*IMPLEMENTATION DETAILS/
@@ -466,5 +542,37 @@ public class MangoService {
 	private boolean mangoStatusUpdateAvailable(MangoStatus currentStatus, MangoInfo mangoInfo) {
 		return currentStatus != mangoInfo.getData().getMedia().getStatus();
 	}
+	
+	private MostRecentUpdatesStats getMostRecentUpdateStats(List<Backlog> backlog, List<CurrentlyReading> ctlyReading,
+			List<Finished> finished) {
+		MostRecentUpdatesStats mostRecentUpdateStats = new MostRecentUpdatesStats();
+		if(backlog.size()>0) {mostRecentUpdateStats.setMostRecentBacklog(backlog.get(backlog.size()-1));}
+		if(ctlyReading.size()>0) {mostRecentUpdateStats.setMostRecentCurrentlyReading(ctlyReading.get(ctlyReading.size()-1));}
+		if(finished.size()>0) {mostRecentUpdateStats.setMostRecentFinished(finished.get(finished.size()-1));}
+		return mostRecentUpdateStats;
+	}
 
+	private GeneralStats getGeneralStats(List<Backlog> backlog, List<CurrentlyReading> ctlyReading,
+			List<Finished> finished, int totalChapters) {
+		GeneralStats generalStats = new GeneralStats();
+		generalStats.setDays(df.format(totalChapters * READING_DAYS_MULTIPLIER));
+		generalStats.setTotalMangoes(backlog.size() + ctlyReading.size() + finished.size());
+		generalStats.setTotalChapters(totalChapters);
+		generalStats.setTotalBacklog(backlog.size());
+		generalStats.setTotalCurrentlyReading(ctlyReading.size());
+		generalStats.setTotalFinished(finished.size());
+		
+		return generalStats;
+	}
+	
+	private boolean isRecordDateWithinDailyStatsRange(String recordDate, DateTimeFormatter formatter) {
+		LocalDate startDateForDailyStats = LocalDate.now();
+		LocalDate endDateForDailyStats = LocalDate.now().minusDays(6);
+
+		return LocalDate.parse(recordDate, formatter).isBefore(startDateForDailyStats) ||
+				LocalDate.parse(recordDate, formatter).isEqual(startDateForDailyStats) && 
+				LocalDate.parse(recordDate, formatter).isAfter(endDateForDailyStats) ||
+				LocalDate.parse(recordDate, formatter).isEqual(endDateForDailyStats);
+	}
+	
 }
