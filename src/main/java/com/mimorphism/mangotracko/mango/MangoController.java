@@ -64,6 +64,7 @@ import com.mimorphism.mangotracko.mango.dto.BacklogDTO;
 import com.mimorphism.mangotracko.mango.dto.CurrentlyReadingDTO;
 import com.mimorphism.mangotracko.mango.dto.DeleteRecordDTO;
 import com.mimorphism.mangotracko.mango.dto.FinishedDTO;
+import com.mimorphism.mangotracko.mango.userstats.pojo.UserStats;
 import com.mimorphism.mangotracko.payload.PagedResponse;
 import com.mimorphism.mangotracko.security.activejwtsession.ActiveJWT;
 import com.mimorphism.mangotracko.security.activejwtsession.ActiveJWTService;
@@ -297,6 +298,14 @@ public class MangoController {
     List<MangoRecordType> getExistingMangoRecords(Principal user) {
     	return mangoService.getUserExistingMangoRecords(user.getName());	
     }
+    
+    @CrossOrigin
+    @GetMapping("/userstats")
+    ResponseEntity<UserStats> getUserStats(Principal user){
+    	return ResponseEntity.ok().body(mangoService.getUserStats(user.getName()));
+    }
+    
+    
 
 	@CrossOrigin
 	@GetMapping("/refreshtoken")
