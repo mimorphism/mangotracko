@@ -102,10 +102,10 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
        
    }
    
-//   @ExceptionHandler(Exception.class)
-//   public ResponseEntity<Object> exception(Exception ex) {
-//	   return buildResponseEntity(new ApiError(INTERNAL_SERVER_ERROR, String.format(REQUEST_FAILED_SERVER_ERROR, ex.getMessage())));
-//     
-//   }
+   @ExceptionHandler(Exception.class)
+   public ResponseEntity<Object> exception(Exception ex) {
+	   return buildResponseEntity(new ApiError(INTERNAL_SERVER_ERROR, String.format(REQUEST_FAILED_SERVER_ERROR, ex.getMessage())));
+     
+   }
    
 }
