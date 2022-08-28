@@ -569,10 +569,11 @@ public class MangoService {
 		LocalDate startDateForDailyStats = LocalDate.now();
 		LocalDate endDateForDailyStats = LocalDate.now().minusDays(6);
 
-		return LocalDate.parse(recordDate, formatter).isBefore(startDateForDailyStats) ||
-				LocalDate.parse(recordDate, formatter).isEqual(startDateForDailyStats) && 
-				LocalDate.parse(recordDate, formatter).isAfter(endDateForDailyStats) ||
-				LocalDate.parse(recordDate, formatter).isEqual(endDateForDailyStats);
+		return (LocalDate.parse(recordDate, formatter).isBefore(startDateForDailyStats) ||
+				LocalDate.parse(recordDate, formatter).isEqual(startDateForDailyStats) )&&
+				(LocalDate.parse(recordDate, formatter).isAfter(endDateForDailyStats) ||
+				LocalDate.parse(recordDate, formatter).isEqual(endDateForDailyStats));
+				
 	}
 	
 }
