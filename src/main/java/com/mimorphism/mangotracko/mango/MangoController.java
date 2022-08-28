@@ -301,9 +301,13 @@ public class MangoController {
     
     @CrossOrigin
     @GetMapping("/userstats")
-    ResponseEntity<UserStats> getUserStats(Principal user){
-    	return ResponseEntity.ok().body(mangoService.getUserStats(user.getName()));
+//    ResponseEntity<UserStats> getUserStats(Principal user){
+    UserStats getUserStats(Principal user) {
+//    	return ResponseEntity.ok().body(mangoService.getUserStats(user.getName()));
+    	return mangoService.getUserStats(user.getName());
     }
+    	
+    
     
     
 
