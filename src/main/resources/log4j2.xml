@@ -20,10 +20,10 @@
     </Appenders>
     <Loggers>
         <Logger name="com.mimorphism.mangotracko.mango" 
-       level="info" additivity="false">
+       level="error" additivity="false">
             <AppenderRef ref="Rollingfile" />
         </Logger>
-        <Root level="info" additivity="false">
+        <Root level="error" additivity="false">
             <AppenderRef ref="console" />
             <AppenderRef ref="Rollingfile" />
         </Root>
