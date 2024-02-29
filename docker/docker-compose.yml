@@ -1,0 +1,53 @@
+version: '3.1'
+services:
+  backend:
+    image: 'mangotracko-backend:latest'
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - redis
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/mangotracko
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=ayam
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_REDIS_HOST=redis
+      
+  db:
+    image: 'postgres:13.6-alpine'
+    ports:
+      - "1234:5432"
+    environment:
+      - POSTGRES_PASSWORD=ayam
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=mangotracko
+    volumes: 
+      - db:/var/lib/postgresql/data
+      
+  redis:
+    image: redis:7.0-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server
+    volumes: 
+      - redis:/data
+   
+  frontend:
+    image: 'mangotracko-frontend:latest'
+    ports:
+      - '3000:80'
+    volumes:
+      - frontend:/data
+    restart: on-failure
+    
+  
+volumes:
+  db:
+    driver: local
+  redis:
+    driver: local
+  frontend:
+    driver: local
+
