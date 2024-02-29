@@ -25,10 +25,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -64,6 +66,7 @@ import com.mimorphism.mangotracko.mango.dto.BacklogDTO;
 import com.mimorphism.mangotracko.mango.dto.CurrentlyReadingDTO;
 import com.mimorphism.mangotracko.mango.dto.DeleteRecordDTO;
 import com.mimorphism.mangotracko.mango.dto.FinishedDTO;
+import com.mimorphism.mangotracko.mango.dto.RemarksUpdateDTO;
 import com.mimorphism.mangotracko.mango.userstats.pojo.UserStats;
 import com.mimorphism.mangotracko.payload.PagedResponse;
 import com.mimorphism.mangotracko.security.activejwtsession.ActiveJWT;
@@ -107,22 +110,27 @@ public class MangoController {
 	@CrossOrigin
 	@GetMapping("/finished")
 	public PagedResponse<Finished> getFinished(Principal user,
-			@RequestParam(value = "page", defaultValue = MangoUtil.DEFAULT_PAGE_NUMBER) int page,
-
-			@RequestParam(value = "size", defaultValue = MangoUtil.DEFAULT_PAGE_SIZE) int size) {
+											   @RequestParam(value = "page", defaultValue = MangoUtil.DEFAULT_PAGE_NUMBER) int page,
+											   @RequestParam(value = "size", defaultValue = MangoUtil.DEFAULT_PAGE_SIZE) int size,
+											   @RequestParam(value = "sort", defaultValue = MangoUtil.SORT_BY_TITLE) String sort,
+											   @RequestParam(value = "dir", defaultValue = "asc") String dir) {
 		PagedResponse<Finished> response = new PagedResponse<>();
 
 		// pagination from the client side starts at 1 while Page starts at 0
 		page -= 1;
 		// first page
 		if (page == 0) {
-			Page<Finished> firstPage = mangoService.getFinishedPage(user.getName(), page, size);
+			Page<Finished> firstPage = mangoService.getFinishedPage(user.getName(), page, size,
+					sort.equals(MangoUtil.SORT_BY_LAST_ACTIVITY)?"completionDateTime":MangoUtil.SORT_BY_TITLE,
+					dir);
 			response.setTotalPages(firstPage.getTotalPages());
 			response.setContent(firstPage.getContent());
 			response.setTotalRecords(firstPage.getTotalElements());
 			response.setCurrentPage(page+1);
 		} else {
-			response.setContent(mangoService.getFinished(user.getName(), page, size));
+			response.setContent(mangoService.getFinishedPage(user.getName(), page, size,
+					sort.equals(MangoUtil.SORT_BY_LAST_ACTIVITY)?"completionDateTime":MangoUtil.SORT_BY_TITLE,
+					dir).getContent());
 			response.setCurrentPage(page+1);
 		}
 
@@ -145,22 +153,28 @@ public class MangoController {
 	@CrossOrigin
 	@GetMapping("/currentlyReading")
 	PagedResponse<CurrentlyReading> getCurrentlyReading(Principal user,
-			@RequestParam(value = "page", defaultValue = MangoUtil.DEFAULT_PAGE_NUMBER) int page,
-			@RequestParam(value = "size", defaultValue = MangoUtil.DEFAULT_PAGE_SIZE) int size) {
+														@RequestParam(value = "page", defaultValue = MangoUtil.DEFAULT_PAGE_NUMBER) int page,
+														@RequestParam(value = "size", defaultValue = MangoUtil.DEFAULT_PAGE_SIZE) int size,
+														@RequestParam(value = "sort", defaultValue = MangoUtil.SORT_BY_TITLE) String sort,
+														@RequestParam(value = "dir", defaultValue = "asc") String dir) {
 		PagedResponse<CurrentlyReading> response = new PagedResponse<>();
 
 		// pagination from the client side starts at 1 while Page starts at 0
 		page -= 1;
 		// first page
 		if (page == 0) {
-			Page<CurrentlyReading> firstPage = mangoService.getCurrentlyReadingPage(user.getName(), page, size);
+			Page<CurrentlyReading> firstPage = mangoService.getCurrentlyReadingPage(user.getName(), page, size,
+					sort.equals(MangoUtil.SORT_BY_LAST_ACTIVITY)?"lastReadTime":MangoUtil.SORT_BY_TITLE,
+					dir);
 			response.setTotalPages(firstPage.getTotalPages());
 			response.setContent(firstPage.getContent());
 			response.setTotalRecords(firstPage.getTotalElements());
 			response.setCurrentPage(page+1);
 
 		} else {
-			response.setContent(mangoService.getCurrentlyReading(user.getName(), page, size));
+			response.setContent(mangoService.getCurrentlyReadingPage(user.getName(), page, size,
+					sort.equals(MangoUtil.SORT_BY_LAST_ACTIVITY)?"lastReadTime":MangoUtil.SORT_BY_TITLE,
+					dir).getContent());
 			response.setCurrentPage(page+1);
 
 		}
@@ -183,21 +197,27 @@ public class MangoController {
 	@CrossOrigin
 	@GetMapping("/backlog")
 	PagedResponse<Backlog> getBacklog(Principal user,
-			@RequestParam(value = "page", defaultValue = MangoUtil.DEFAULT_PAGE_NUMBER) int page,
-			@RequestParam(value = "size", defaultValue = MangoUtil.DEFAULT_PAGE_SIZE) int size) {
+									  @RequestParam(value = "page", defaultValue = MangoUtil.DEFAULT_PAGE_NUMBER) int page,
+									  @RequestParam(value = "size", defaultValue = MangoUtil.DEFAULT_PAGE_SIZE) int size,
+									  @RequestParam(value = "sort", defaultValue = MangoUtil.SORT_BY_TITLE) String sort,
+									  @RequestParam(value = "dir", defaultValue = "asc") String dir) {
 		PagedResponse<Backlog> response = new PagedResponse<>();
 
 		// pagination from the client side starts at 1 while Page starts at 0
 		page -= 1;
 		// first page
 		if (page == 0) {
-			Page<Backlog> firstPage = mangoService.getBacklogPage(user.getName(), page, size);
+			Page<Backlog> firstPage = mangoService.getBacklogPage(user.getName(), page, size,
+					sort.equals(MangoUtil.SORT_BY_LAST_ACTIVITY)?"addedDateTime":MangoUtil.SORT_BY_TITLE,
+			dir);
 			response.setTotalPages(firstPage.getTotalPages());
 			response.setContent(firstPage.getContent());
 			response.setTotalRecords(firstPage.getTotalElements());
 			response.setCurrentPage(page+1);
 		} else {
-			response.setContent(mangoService.getBacklog(user.getName(), page, size));
+			response.setContent(mangoService.getBacklogPage(user.getName(), page, size,
+					sort.equals(MangoUtil.SORT_BY_LAST_ACTIVITY)?"addedDateTime":MangoUtil.SORT_BY_TITLE,
+					dir).getContent());
 			response.setCurrentPage(page+1);
 		}
 		return response;
@@ -232,6 +252,19 @@ public class MangoController {
 	ResponseEntity<?> updateMangoFinish(@Valid @RequestBody CurrentlyReadingDTO mango) {
 		try {
 			mangoService.updateCtlyReadingRecordAndFinish(mango);
+			return ResponseEntity.ok().body(mangoUtil.getMessage(REQUEST_SUCCESFUL));
+		} catch (UserNotFoundException ex) {
+			return ResponseEntity.status(BAD_REQUEST).body(ex.getMessage());
+		} catch (MangoNotFoundException ex) {
+			return ResponseEntity.status(BAD_REQUEST).body(ex.getMessage());
+		}
+	}
+	
+	@CrossOrigin
+	@PutMapping("/updateFinishedRemarks")
+	ResponseEntity<?> updateMangoFinish(Principal user, @Valid @RequestBody @NotEmpty RemarksUpdateDTO remarks) {
+		try {
+			mangoService.updateRemarks(user.getName(), remarks);
 			return ResponseEntity.ok().body(mangoUtil.getMessage(REQUEST_SUCCESFUL));
 		} catch (UserNotFoundException ex) {
 			return ResponseEntity.status(BAD_REQUEST).body(ex.getMessage());
@@ -305,9 +338,6 @@ public class MangoController {
     	return ResponseEntity.ok().body(mangoService.getUserStats(user.getName()));
     }
     	
-    
-    
-    
 
 	@CrossOrigin
 	@GetMapping("/refreshtoken")

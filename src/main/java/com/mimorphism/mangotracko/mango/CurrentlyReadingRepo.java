@@ -21,6 +21,9 @@ public interface CurrentlyReadingRepo extends PagingAndSortingRepository<Current
     
     @Query("SELECT b.mango.anilistId FROM CurrentlyReading b WHERE b.user.id = ?1")
     public List<Long> findMangoMangoIdByUserId(Long userId);
+    
+    @Query("SELECT SUM(b.lastChapterRead) FROM CurrentlyReading b WHERE b.user.id = ?1")
+    public int getTotalChapterCount(Long userId);
 
 
 	

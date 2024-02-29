@@ -10,6 +10,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.mimorphism.mangotracko.appuser.AppUser;
@@ -34,7 +35,12 @@ public class MangoUtil {
 	
 	private static final String NO_REMARKS = "No remarks";
 
-	
+	public static final String SORT_BY_LAST_ACTIVITY = "LAST_ACTIVITY";
+
+	public static final String SORT_BY_TITLE = "TITLE";
+
+
+
 	public MangoUtil(MessageSource messageSource){
 		this.messageSource = messageSource;
 	}
@@ -120,5 +126,4 @@ public class MangoUtil {
 		return requestData != null && !requestData.isEmpty() ? requestData
 				: NO_REMARKS;
 	}
-
 }

@@ -21,6 +21,9 @@ public interface FinishedRepo extends PagingAndSortingRepository<Finished, Long>
     
     @Query("SELECT b.mango.anilistId FROM Finished b WHERE b.user.id = ?1")
     public List<Long> findMangoMangoIdByUserId(Long userId);
+    
+    @Query("SELECT SUM(b.mango.lastChapter) FROM Finished b WHERE b.user.id = ?1")
+    public int getTotalChapterCount(Long userId);
 
     
     
