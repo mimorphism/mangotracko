@@ -20,7 +20,7 @@ import com.mimorphism.mangotracko.exception.handler.ResponseHandler;
 import com.mimorphism.mangotracko.util.MangoUtil;
 
 @RestController
-@RequestMapping(path = "/auth/registration")
+@RequestMapping(path = "/api/auth/registration")
 @AllArgsConstructor
 public class RegistrationController {
 	
